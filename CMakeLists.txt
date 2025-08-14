@@ -1,0 +1,7 @@
+add_subdirectory(abp)
+add_subdirectory(eager)
+add_subdirectory(flux)
+add_subdirectory(ir_base)
+add_subdirectory(pphlo)
+add_subdirectory(runtime)
+add_subdirectory(source)
