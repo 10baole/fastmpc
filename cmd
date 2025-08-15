@@ -920,3 +920,10 @@ Call Stack (most recent call first):
 
 -- Generating done
 CMake Generate step failed.  Build files cannot be regenerated correctly.
+
+
+mkdir build
+cd build
+cmake -DZLIB_LIBRARY=/usr/lib/x86_64-linux-gnu/libz.so \
+      -DTerminfo_LIBRARIES=/usr/lib/x86_64-linux-gnu/libtinfo.so \
+      ../
