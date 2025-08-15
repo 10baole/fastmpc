@@ -97,7 +97,7 @@ TEST(abp_function_test, euqal_true) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 0.5f, false);
-  auto result = equal(builder, left, right);
+  auto result = isEqual(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 1);
@@ -107,7 +107,7 @@ TEST(abp_function_test, euqal_false) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, -0.5f, false);
-  auto result = equal(builder, left, right);
+  auto result = isEqual(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 0);
@@ -117,7 +117,7 @@ TEST(abp_function_test, less_less) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 1.f, false);
-  auto result = less(builder, left, right);
+  auto result = isLess(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 1);
@@ -127,7 +127,7 @@ TEST(abp_function_test, less_equal) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 0.5f, false);
-  auto result = less(builder, left, right);
+  auto result = isLess(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 0);
@@ -137,7 +137,7 @@ TEST(abp_function_test, less_greater) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.7f, false);
   auto right = env.arg_float(1, 0.6f, false);
-  auto result = less(builder, left, right);
+  auto result = isLess(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 0);
@@ -147,7 +147,7 @@ TEST(abp_function_test, greater_greater) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.7f, false);
   auto right = env.arg_float(1, 0.6f, false);
-  auto result = greater(builder, left, right);
+  auto result = isGreater(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 1);
@@ -157,7 +157,7 @@ TEST(abp_function_test, greater_equal) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 0.5f, false);
-  auto result = greater(builder, left, right);
+  auto result = isGreater(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 0);
@@ -167,7 +167,7 @@ TEST(abp_function_test, greater_less) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 1.f, false);
-  auto result = greater(builder, left, right);
+  auto result = isGreater(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 0);
@@ -177,7 +177,7 @@ TEST(abp_function_test, greater_equal_less) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 1.f, false);
-  auto result = greater_equal(builder, left, right);
+  auto result = isGEQ(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 0);
@@ -187,7 +187,7 @@ TEST(abp_function_test, greater_equal_equal) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 0.5f, false);
-  auto result = greater_equal(builder, left, right);
+  auto result = isGEQ(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 1);
@@ -197,7 +197,7 @@ TEST(abp_function_test, greater_equal_greater) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 0.1f, false);
-  auto result = greater_equal(builder, left, right);
+  auto result = isGEQ(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_int(), 1);
@@ -208,7 +208,7 @@ TEST(abp_function_test, select_true) {
   auto which = env.arg_int(0, 1, false);
   auto left = env.arg_float(1, 10000.5f, false);
   auto right = env.arg_float(2, 100.5f, false);
-  auto result = select(builder, which, left, right);
+  auto result = selectOne(builder, which, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_float(), 10000.5);
@@ -219,7 +219,7 @@ TEST(abp_function_test, select_false) {
   auto which = env.arg_int(0, 0, false);
   auto left = env.arg_float(1, 10000.5f, false);
   auto right = env.arg_float(2, 100.5f, false);
-  auto result = select(builder, which, left, right);
+  auto result = selectOne(builder, which, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_float(), 100.5);
@@ -229,7 +229,7 @@ TEST(abp_function_test, max_left) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 0.1f, false);
-  auto result = max(builder, left, right);
+  auto result = maximize(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_float(), 0.5);
@@ -239,7 +239,7 @@ TEST(abp_function_test, max_right) {
   SETUP(15, 2, 1);
   auto left = env.arg_float(0, 0.5f, false);
   auto right = env.arg_float(1, 1.5f, false);
-  auto result = max(builder, left, right);
+  auto result = maximize(builder, left, right);
   builder.output(result, 0);
   executor.run();
   EXPECT_EQ(env.output_float(), 1.5);

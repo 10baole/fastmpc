@@ -13,12 +13,6 @@ using namespace std;
 
 namespace fastmpc::flux::_3pc {
 
-    struct ValueVisitor {
-        virtual ~ValueVisitor() = default;
-        virtual void visit(PlainValue  operand) = 0;
-        virtual void visit(CipherValue operand) = 0;
-    };
-
     void _3PCLower::run() {
         for (size_t i = 0; i < abp_context_->ops_size(); i++) {
             abp::OpHandle handle(i);
@@ -157,6 +151,18 @@ namespace fastmpc::flux::_3pc {
     void _3PCLower::operator()(abp::OpHandle handle, abp::P2AOp op) {
         auto operand = get_plain_value(op.operand);
         auto result  = p2a(*builder_, operand);
+        set_value(handle, result);
+    }
+
+    void _3PCLower::operator()(abp::OpHandle handle, abp::A2BOp op) {
+        auto operand = get_cipher_value(op.operand);
+        auto result  = a2b(*builder_, operand);
+        set_value(handle, result);
+    }
+
+    void _3PCLower::operator()(abp::OpHandle handle, abp::B2AOp op) {
+        auto operand = get_cipher_value(op.operand);
+        auto result  = b2a(*builder_, operand);
         set_value(handle, result);
     }
 

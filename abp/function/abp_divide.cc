@@ -16,7 +16,7 @@ namespace {
 
 auto divide_xa(ABPBuilder &builder, OpHandle x, OpHandle y) -> OpHandle {
   auto is_negative = msb(builder, y);
-  auto y_abs = select(builder, is_negative, negate(builder, y), y);
+  auto y_abs = selectOne(builder, is_negative, negate(builder, y), y);
   auto y_msb = highest_one_bit(builder, y_abs);
   auto factor = bit_reverse(builder, y_msb, 2 * builder.fixed_point());
   x = multiply(builder, x, factor);
@@ -26,7 +26,7 @@ auto divide_xa(ABPBuilder &builder, OpHandle x, OpHandle y) -> OpHandle {
     if (i + 1 != 5)
       y = subtract(builder, add(builder, y, y), multiply(builder, y, y));
   }
-  return select(builder, is_negative, negate(builder, x), x);
+  return selectOne(builder, is_negative, negate(builder, x), x);
 }
 
 auto divide_xp(ABPBuilder &builder, OpHandle x, OpHandle y) -> OpHandle {

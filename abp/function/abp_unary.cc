@@ -92,7 +92,7 @@ auto log(ABPBuilder &builder, OpHandle x) -> OpHandle {
 auto abs(ABPBuilder &builder, OpHandle x) -> OpHandle {
   auto is_negative = msb(builder, x);
   auto x_neg = negate(builder, x);
-  return select(builder, is_negative, x_neg, x);
+  return selectOne(builder, is_negative, x_neg, x);
 }
 
 } // namespace fastmpc::abp

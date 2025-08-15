@@ -28,9 +28,17 @@ namespace fastmpc::flux::_3pc {
             void operator()(abp::OpHandle handle, abp::InputOp op);
             void operator()(abp::OpHandle handle, abp::OutputOp op);
 
+            void operator()(abp::OpHandle handle, abp::AddAAOp op);
+            void operator()(abp::OpHandle handle, abp::AddAPOp op);
+            void operator()(abp::OpHandle handle, abp::AddPPOp op);            
+            void operator()(abp::OpHandle handle, abp::MultiplyAAOp op);
+            void operator()(abp::OpHandle handle, abp::MultiplyAPOp op);
+            void operator()(abp::OpHandle handle, abp::MultiplyPPOp op);
+            
             void operator()(abp::OpHandle handle, abp::ConstantOp op);
             void operator()(abp::OpHandle handle, abp::NegateAOp op);
             void operator()(abp::OpHandle handle, abp::NegatePOp op);
+            
             void operator()(abp::OpHandle handle, abp::InverseOp op);
             void operator()(abp::OpHandle handle, abp::NotBOp op);
             void operator()(abp::OpHandle handle, abp::BitReverseOp op);
@@ -40,27 +48,21 @@ namespace fastmpc::flux::_3pc {
             void operator()(abp::OpHandle handle, abp::TruncatePOp op);
 
             void operator()(abp::OpHandle handle, abp::P2AOp op);
+            void operator()(abp::OpHandle handle, abp::A2BOp op);
+            void operator()(abp::OpHandle handle, abp::B2AOp op);
             
             void operator()(abp::OpHandle handle, abp::BroadcastOp op);
-            void operator()(abp::OpHandle handle, abp::ReshapeOp op);
-            void operator()(abp::OpHandle handle, abp::SliceOp op);
+            void operator()(abp::OpHandle handle, abp::ReshapeOp   op);
+            void operator()(abp::OpHandle handle, abp::SliceOp     op);
             void operator()(abp::OpHandle handle, abp::TransposeOp op);
-
-            void operator()(abp::OpHandle handle, abp::AddAAOp op);
-            void operator()(abp::OpHandle handle, abp::AddAPOp op);
-            void operator()(abp::OpHandle handle, abp::AddPPOp op);            
-            void operator()(abp::OpHandle handle, abp::MultiplyAAOp op);
-            void operator()(abp::OpHandle handle, abp::MultiplyAPOp op);
-            void operator()(abp::OpHandle handle, abp::MultiplyPPOp op);
-
-            void operator()(abp::OpHandle handle, abp::ConcateOp op);
+            void operator()(abp::OpHandle handle, abp::ConcateOp   op);
 
         private:
-            virtual auto get_cipher_value(abp::OpHandle handle) -> CipherValue = 0;
-            virtual auto get_plain_value(abp::OpHandle  handle) -> PlainValue  = 0;
-            virtual void visit_value(abp::OpHandle      handle, ValueVisitor &visitor) = 0;
-            virtual void set_value(abp::OpHandle handle, CipherValue value) = 0;
-            virtual void set_value(abp::OpHandle handle, PlainValue  value) = 0;
+            auto get_cipher_value(abp::OpHandle handle) -> CipherValue;
+            auto get_plain_value(abp::OpHandle  handle) -> PlainValue;
+            void visit_value(abp::OpHandle      handle, ValueVisitor &visitor);
+            void set_value(abp::OpHandle handle, CipherValue value);
+            void set_value(abp::OpHandle handle, PlainValue  value);
 
             void push(abp::OpHandle handle, PlainValue value);
             void push(abp::OpHandle handle, CipherValue value);

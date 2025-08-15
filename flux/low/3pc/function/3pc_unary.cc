@@ -54,16 +54,25 @@ namespace fastmpc::flux::_3pc {
     }
 
     auto truncate_a(FluxBuilder &builder, CipherValue operand, uint8_t bits) -> CipherValue {
+        auto &context = builder.context();
+        auto shape = context.type(operand.p0_v0).shape;
         auto [p0_v0, p0_v1, p1_v1, p1_v2, p2_v2, p2_v0] = operand;
+        auto [p1_y2, p2_y2] = builder.random(1, 2, shape);
+        auto p0_y0 = builder.arith_shift_right(p0_v0, bits);
+        auto p2_y0 = builder.arith_shift_right(p2_v0, bits);
+        auto p1_y1 = builder.add(p1_v1, p1_y2);
+        p1_y1 = builder.arith_shift_right(p1_y1, bits);
+        auto p0_y1 = builder.cast(p1_y1, 0);
+
         return CipherValue{
-            .p0_v0 = builder.arith_shift_right(p0_v0, bits),
-            .p0_v1 = builder.arith_shift_right(p0_v1, bits),
+            .p0_v0 = p0_y0,
+            .p0_v1 = p0_y1,
 
-            .p1_v1 = builder.arith_shift_right(p1_v1, bits),
-            .p1_v2 = builder.arith_shift_right(p1_v2, bits),
+            .p1_v1 = p1_y1,
+            .p1_v2 = p1_y2,
 
-            .p2_v2 = builder.arith_shift_right(p2_v2, bits),
-            .p2_v0 = builder.arith_shift_right(p2_v0, bits),
+            .p2_v2 = p2_y2,
+            .p2_v0 = p2_y0,
         };
     }
 
@@ -142,6 +151,8 @@ namespace fastmpc::flux::_3pc {
             .p2_v0 = make_zeros(2),
         };
     }
+
+
 
     namespace {
 

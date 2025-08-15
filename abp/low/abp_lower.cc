@@ -263,28 +263,28 @@ void ABPLower::low_convert(mlir::pphlo::ConvertOp *op) {
 void ABPLower::low_equal(mlir::pphlo::EqualOp *op) {
   auto left = map_.find(op->getLhs())->second;
   auto right = map_.find(op->getRhs())->second;
-  auto result = equal(*builder_, left, right);
+  auto result = isEqual(*builder_, left, right);
   map_.try_emplace(op->getResult(), result);
 }
 
 void ABPLower::low_greater(mlir::pphlo::GreaterOp *op) {
   auto left = map_.find(op->getLhs())->second;
   auto right = map_.find(op->getRhs())->second;
-  auto result = greater(*builder_, left, right);
+  auto result = isGreater(*builder_, left, right);
   map_.try_emplace(op->getResult(), result);
 }
 
 void ABPLower::low_greater_equal(mlir::pphlo::GreaterEqualOp *op) {
   auto left = map_.find(op->getLhs())->second;
   auto right = map_.find(op->getRhs())->second;
-  auto result = greater_equal(*builder_, left, right);
+  auto result = isGEQ(*builder_, left, right);
   map_.try_emplace(op->getResult(), result);
 }
 
 void ABPLower::low_less(mlir::pphlo::LessOp *op) {
   auto left = map_.find(op->getLhs())->second;
   auto right = map_.find(op->getRhs())->second;
-  auto result = less(*builder_, left, right);
+  auto result = isLess(*builder_, left, right);
   map_.try_emplace(op->getResult(), result);
 }
 
@@ -308,14 +308,14 @@ void ABPLower::low_select(mlir::pphlo::SelectOp *op) {
   auto pred = map_.find(op->getPred())->second;
   auto on_true = map_.find(op->getOnTrue())->second;
   auto on_false = map_.find(op->getOnFalse())->second;
-  auto result = select(*builder_, pred, on_true, on_false);
+  auto result = selectOne(*builder_, pred, on_true, on_false);
   map_.try_emplace(op->getResult(), result);
 }
 
 void ABPLower::low_maximum(mlir::pphlo::MaxOp *op) {
   auto left = map_.find(op->getLhs())->second;
   auto right = map_.find(op->getRhs())->second;
-  auto result = max(*builder_, left, right);
+  auto result = maximize(*builder_, left, right);
   map_.try_emplace(op->getResult(), result);
 }
 
@@ -436,7 +436,7 @@ void ABPLower::low_reduce(mlir::pphlo::ReduceOp *op) {
     if (auto op = llvm::dyn_cast<mlir::pphlo::AddOp>(in)) {
       reducer = add;
     } else if (auto op = llvm::dyn_cast<mlir::pphlo::MaxOp>(in)) {
-      reducer = max;
+      reducer = maximize;
     } else {
       llvm::errs() << op->getName() << " is not supported in reduceOp!\n";
       std::abort();
